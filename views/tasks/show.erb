@@ -1,0 +1,34 @@
+<h2>Task Details: <%= @task.title %></h2>
+
+<div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px; background-color: #f9f9f9;">
+  <p><strong>ID:</strong> <%= @task.id %></p>
+  <p><strong>Title:</strong> <%= @task.title %></p>
+  <p><strong>Description:</strong> <%= @task.description.nil? || @task.description.empty? ? '<em>N/A</em>' : @task.description %></p>
+  <p><strong>Completed:</strong> <%= @task.completed ? 'Yes' : 'No' %></p>
+  <p><strong>Due Date:</strong> <%= @task.due_date ? @task.due_date.strftime('%Y-%m-%d') : '<em>N/A</em>' %></p>
+  <p><strong>Created At:</strong> <%= @task.created_at ? @task.created_at.strftime('%Y-%m-%d %H:%M:%S') : '<em>N/A</em>' %></p>
+  <p><strong>Updated At:</strong> <%= @task.updated_at ? @task.updated_at.strftime('%Y-%m-%d %H:%M:%S') : '<em>N/A</em>' %></p>
+</div>
+
+<!-- Display Notes -->
+<h3>Notes</h3>
+<% if @task.task_notes.empty? %>
+  <p>No notes added yet.</p>
+<% else %>
+  <ul style="list-style: none; padding-left: 0;">
+    <% @task.task_notes.each do |note| %>
+      <li style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+        <p><%= note.content %></p>
+        <small><em>Added: <%= note.created_at.strftime('%Y-%m-%d %H:%M') %></em></small>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+<!-- Optionally add 'Add Note' form here as well, similar to edit page -->
+
+<hr style="margin: 20px 0;">
+
+<p>
+  <a href="/tasks/<%= @task.id %>/edit" class="button">Edit Task</a>
+  <a href="/tasks" class="button">Back to Tasks List</a>
+</p>

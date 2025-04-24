@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brisa CRM</title>
+    <!-- Pico.css CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="/css/style.css"> <!-- Re-enabled custom styles -->
+    <!-- Removed inline style block -->
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="container-fluid">
+    <ul>
+      <!-- Replace text with logo -->
+      <li><a href="/" style="padding: 0.5rem 0;"><img src="/images/brisa-logo.svg" alt="Brisa Logo" style="height: 72px; vertical-align: middle;"></a></li>
+    </ul>
+    <ul>
+      <!-- Check if path starts with '/tasks' -->
+      <li><a href="/tasks" class="<%= 'active' if request.path_info.start_with?('/tasks') %>">Tasks</a></li>
+      <!-- Check if path starts with '/contacts' -->
+      <li><a href="/contacts" class="<%= 'active' if request.path_info.start_with?('/contacts') %>">Contacts</a></li>
+      <!-- Check if path starts with '/customers' -->
+      <li><a href="/customers" class="<%= 'active' if request.path_info.start_with?('/customers') %>">Customers</a></li>
+      <!-- Add links for Prospects, Service Plans later -->
+    </ul>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="container">
+
+    <!-- Flash Messages -->
+    <% if flash[:notice] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+    <% if flash[:warning] %>
+      <div class="alert alert-warning" role="alert">
+        <%= flash[:warning] %>
+      </div>
+    <% end %>
+    <% if flash[:error] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:error] %>
+      </div>
+    <% end %>
+
+    <%= yield %>
+
+  </main> <!-- /.container -->
+
+  <hr>
+  <footer>
+      <p>&copy; <%= Time.now.year %> Brisa CRM</p>
+  </footer>
+
+</body>
+</html>

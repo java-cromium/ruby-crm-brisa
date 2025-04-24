@@ -1,0 +1,79 @@
+<h2>Edit Task: <%= @task.title %></h2>
+
+<form action="/tasks/<%= @task.id %>" method="post" class="form-standard">
+  <input type="hidden" name="_method" value="patch"> 
+
+  <div class="form-group">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="task[title]" value="<%= @task.title %>" 
+           class="<%= 'is-invalid' if @task&.errors&.on(:title) %>" required>
+    <% if @task&.errors&.on(:title) %>
+      <span class="field-error"><%= @task.errors.on(:title).join(', ') %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description:</label>
+    <textarea id="description" name="task[description]" rows="4" 
+              class="<%= 'is-invalid' if @task&.errors&.on(:description) %>"><%= @task.description %></textarea>
+    <% if @task&.errors&.on(:description) %>
+      <span class="field-error"><%= @task.errors.on(:description).join(', ') %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <label for="due_date">Due Date:</label>
+    <input type="date" id="due_date" name="task[due_date]" value="<%= @task.due_date ? @task.due_date.strftime('%Y-%m-%d') : '' %>" 
+           class="<%= 'is-invalid' if @task&.errors&.on(:due_date) %>">
+    <% if @task&.errors&.on(:due_date) %>
+      <span class="field-error"><%= @task.errors.on(:due_date).join(', ') %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <label for="completed">Completed:</label>
+    <input type="hidden" name="task[completed]" value="false">
+    <input type="checkbox" id="completed" name="task[completed]" value="true" <%= 'checked' if @task.completed %>
+           class="<%= 'is-invalid' if @task&.errors&.on(:completed) %>">
+    <% if @task&.errors&.on(:completed) %>
+      <span class="field-error"><%= @task.errors.on(:completed).join(', ') %></span>
+    <% end %>
+  </div>
+
+  <div>
+    <button type="submit" class="button">Update Task</button>
+    <a href="/tasks/<%= @task.id %>" class="button secondary">Cancel</a>
+  </div>
+</form>
+
+<hr style="margin-top: 20px; margin-bottom: 10px;">
+
+<form action="/tasks/<%= @task.id %>" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this task and all its notes?');">
+  <input type="hidden" name="_method" value="delete">
+  <button type="submit" class="button danger">Delete Task</button>
+</form>
+
+<h3>Notes</h3>
+<% if @task.task_notes.empty? %>
+  <p>No notes added yet.</p>
+<% else %>
+  <ul>
+    <% @task.task_notes.each do |note| %>
+      <li>
+        <%= note.content %>
+        <small>(Added: <%= note.created_at.strftime('%Y-%m-%d %H:%M') %>)</small>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<h3>Add a Note</h3>
+<form action="/tasks/<%= @task.id %>/notes" method="post" class="form-standard">
+  <div class="form-group">
+    <label for="content">New Note:</label>
+    <textarea id="content" name="content" rows="3" required></textarea>
+  </div>
+  <div>
+    <button type="submit" class="button">Add Note</button>
+  </div>
+</form>

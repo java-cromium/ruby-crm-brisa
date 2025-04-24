@@ -1,0 +1,43 @@
+<h2>Customers List</h2>
+
+<% if @customers.empty? %>
+  <p>No customers found. <a href="/customers/new" role="button" class="contrast">Add one?</a></p>
+  <!-- We'll add a way to create customers later, perhaps from the contacts list -->
+<% else %>
+  <figure>
+    <table>
+      <thead>
+        <tr>
+          <th>Customer ID</th>
+          <th>Contact Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @customers.each do |customer| %>
+          <% contact = customer.contact # Convenience %>
+          <tr>
+            <td><%= customer.id %></td>
+            <!-- Link the name to the customer show page -->
+            <td><a href="/customers/<%= customer.id %>"><%= contact.first_name %> <%= contact.last_name %></a></td>
+            <td><%= contact.email %></td>
+            <td><%= contact.phone %></td>
+            <td class="status-badge status-<%= customer.status %> text-center"><%= customer.status.capitalize %></td>
+            <td>
+              <a href="/customers/<%= customer.id %>/edit" role="button" class="action-button-sm action-edit">Edit Status</a> |
+              <form action="/customers/<%= customer.id %>" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to remove customer status for this contact? The contact record will remain.');">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="action-button-sm action-delete">Remove Status</button>
+              </form>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </figure>
+<% end %>
+
+<p><a href="/customers/new" role="button" class="action-add">Add New Customer</a></p>

@@ -1,0 +1,36 @@
+<h2>Create New Task</h2>
+
+<form action="/tasks" method="post" class="form-standard">
+  <div class="form-group">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="task[title]" value="<%= @task&.title %>" 
+           class="<%= 'is-invalid' if @task&.errors&.on(:title) %>" required>
+    <% if @task&.errors&.on(:title) %>
+      <span class="field-error"><%= @task.errors.on(:title).join(', ') %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description:</label>
+    <textarea id="description" name="task[description]" rows="4" 
+              class="<%= 'is-invalid' if @task&.errors&.on(:description) %>"><%= @task&.description %></textarea>
+    <% if @task&.errors&.on(:description) %>
+      <span class="field-error"><%= @task.errors.on(:description).join(', ') %></span>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <label for="due_date">Due Date:</label>
+    <input type="date" id="due_date" name="task[due_date]" value="<%= @task&.due_date %>" 
+           class="<%= 'is-invalid' if @task&.errors&.on(:due_date) %>">
+    <% if @task&.errors&.on(:due_date) %>
+      <span class="field-error"><%= @task.errors.on(:due_date).join(', ') %></span>
+    <% end %>
+  </div>
+
+  <!-- 'Completed' defaults to false, no need for a form field -->
+  <div>
+    <button type="submit" class="button">Create Task</button>
+    <a href="/tasks" class="button secondary">Cancel</a>
+  </div>
+</form>

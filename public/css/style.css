@@ -1,0 +1,315 @@
+/* public/css/style.css - Custom overrides for Pico.css */
+
+/* Basic Reset & Body */
+body {
+  font-family: sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-color: #FFD63A; /* More vibrant yellow */
+  color: #333;
+}
+
+/* --- Global Style Adjustments --- */
+:root {
+  --pico-font-size: 70%; /* Base font size */
+}
+
+/* --- Layout Adjustments --- */
+main.container {
+  max-width: 1400px; /* Increase container width */
+  margin: 20px auto;
+  padding: 0 20px;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  padding-bottom: 30px; /* Add padding at bottom */
+}
+
+h1, h2, h3 {
+  color: #343a40; /* Very Dark Grey */
+  margin-bottom: 15px;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Navigation */
+nav {
+  background-color: #343a40;
+  padding: 10px 0;
+  margin-bottom: 20px;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+nav ul li {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+nav ul li a:hover,
+nav ul li a.active { /* Style for active link */
+  background-color: #495057;
+}
+
+/* Forms */
+.form-standard {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.form-group textarea {
+  resize: vertical; /* Allow vertical resize */
+}
+
+.form-group input[type="checkbox"] {
+    width: auto; /* Checkboxes don't need full width */
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+/* Validation Error Styling */
+[aria-invalid="true"] {
+  border-color: var(--pico-form-element-invalid-border-color, #dc3545) !important; /* Use Pico variable, add !important if needed */
+  /* Pico adds a background image icon, we can override if needed */
+  background-image: var(--pico-icon-invalid);
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-repeat: no-repeat;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.field-error {
+  color: var(--pico-form-element-invalid-border-color, #dc3545);
+  font-size: 0.8em; /* Relative to new base */
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* Flash Messages */
+.alert {
+  padding: 0.75rem 1rem; /* Adjust padding if needed */
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--pico-border-radius);
+}
+
+.alert-success {
+  color: var(--pico-color-green-800, #155724);
+  background-color: var(--pico-color-green-100, #d4edda);
+  border-color: var(--pico-color-green-200, #c3e6cb);
+}
+
+.alert-danger {
+  color: var(--pico-color-red-800, #721c24);
+  background-color: var(--pico-color-red-100, #f8d7da);
+  border-color: var(--pico-color-red-200, #f5c6cb);
+}
+
+/* Button Size Adjustments */
+/* Increase specificity and set properties directly */
+main.container button,
+main.container [role="button"],
+main.container a.secondary,
+main.container a.contrast,
+main.container a.outline {
+  /* Override Pico variables (might still help) */
+  --pico-font-size: 0.85rem;
+  --pico-padding-vertical: 0.4rem;
+  --pico-padding-horizontal: 0.8rem;
+
+  /* Set properties directly - adjust values as needed */
+  font-size: 0.8rem; /* Explicit font size (adjust) */
+  padding: 0.3rem 0.7rem; /* Explicit padding (adjust) */
+  line-height: 1.4; /* Adjust line height */
+  min-height: auto; /* Remove any minimum height */
+}
+
+/* Specific style for smaller action buttons in tables */
+.action-button-sm {
+  font-size: 0.7rem !important; /* Even smaller font */
+  padding: 0.15rem 0.4rem !important; /* Tighter padding */
+  line-height: 1.2 !important; /* Adjust line height */
+  vertical-align: middle; /* Align nicely */
+  margin: 0 2px; /* Add slight horizontal margin */
+  width: 120px; /* Fixed width */
+  white-space: nowrap; /* Prevent text wrapping */
+  text-align: center; /* Center text in button */
+}
+
+/* Action Button Colors */
+.action-edit {
+  background-color: #6c757d !important; /* Dark Grey */
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.action-delete {
+  background-color: #dc3545 !important; /* Red */
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.action-add {
+  background-color: #28a745 !important; /* Green */
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.action-view {
+  background-color: #007bff !important; /* Blue */
+  color: #ffffff !important;
+  border: none !important;
+}
+
+/* Action Button Hover States */
+.action-edit:hover {
+  background-color: #5a6268 !important; /* Darker Grey */
+}
+
+.action-delete:hover {
+  background-color: #c82333 !important; /* Darker Red */
+}
+
+.action-add:hover {
+  background-color: #218838 !important; /* Darker Green */
+}
+
+.action-view:hover {
+  background-color: #0056b3 !important; /* Darker Blue */
+}
+
+/* Allow dashboard 'View All' buttons to size naturally */
+article footer .action-button-sm {
+  width: auto !important; /* Override fixed width */
+  white-space: normal !important; /* Allow wrapping if needed */
+}
+
+/* Smaller inline buttons - simplify selector for now */
+/* main.container form button.secondary.outline { */ /* Commented out temporarily */
+  /* --pico-font-size: 0.8rem; */
+  /* --pico-padding-vertical: 0.1rem; */
+  /* --pico-padding-horizontal: 0.4rem; */
+  /* font-size: 0.75rem; */
+  /* padding: 0.1rem 0.4rem; */
+  /* margin-left: 5px; */
+  /* vertical-align: middle; */
+/* } */
+
+/* Utility */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #dee2e6;
+    margin: 20px 0;
+}
+
+/* --- Utility Classes --- */
+.text-center {
+  text-align: center !important; /* Center align text, use !important if needed */
+}
+
+/* --- Add any other custom styles below --- */
+
+/* Footer Styles */
+footer {
+  background-color: #f8f9fa; /* Light grey background */
+  color: #6c757d; /* Muted text color */
+  padding: 1.5rem 0; /* Vertical padding */
+  margin-top: 2rem; /* Space above footer */
+  text-align: center;
+}
+
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  text-align: left;
+}
+
+.table thead th {
+  background-color: #e9ecef;
+  border-bottom-width: 2px;
+  font-weight: bold;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.03); /* Subtle stripe */
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.06); /* Subtle hover */
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: white;
+  display: inline-block; /* Fit content */
+}
+
+.status-badge.status-active,
+.status-badge.status-success {
+  background-color: #28a745; /* Green */
+}
+
+.status-badge.status-inactive {
+  background-color: #6c757d; /* Grey */
+}
+
+.status-badge.status-prospect {
+  background-color: #ffc107; /* Yellow */
+  color: #333; /* Darker text for yellow */
+}

@@ -1,0 +1,35 @@
+<h2>Edit Customer Status: <%= @customer.contact.first_name %> <%= @customer.contact.last_name %></h2>
+
+<form action="/customers/<%= @customer.id %>" method="post" class="form-standard">
+  <!-- Use hidden input to specify PUT method for update -->
+  <input type="hidden" name="_method" value="put">
+
+  <p><strong>Customer ID:</strong> <%= @customer.id %></p>
+  <p><strong>Name:</strong> <%= @customer.contact.first_name %> <%= @customer.contact.last_name %></p>
+
+  <div class="form-group">
+    <label for="status">Status:</label>
+    <select id="status" name="customer[status]" 
+            class="<%= 'is-invalid' if @customer&.errors&.on(:status) %>">
+      <% @allowed_statuses.each do |status| %>
+        <option value="<%= status %>" <%= 'selected' if status == @customer.status %>>
+          <%= status.capitalize %>
+        </option>
+      <% end %>
+    </select>
+    <% if @customer&.errors&.on(:status) %>
+      <span class="field-error"><%= @customer.errors.on(:status).join(', ') %></span>
+    <% end %>
+  </div>
+
+  <button type="submit" class="button">Update Status</button>
+  <a href="/customers/<%= @customer.id %>" class="button secondary">Cancel</a> <!-- Link back to show page -->
+</form>
+
+<hr style="margin-top: 20px; margin-bottom: 10px;">
+
+<!-- Delete Button Form -->
+<form action="/customers/<%= @customer.id %>" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to remove customer status for this contact? The contact record will remain.');">
+  <input type="hidden" name="_method" value="delete">
+  <button type="submit" class="button danger">Remove Customer Status</button>
+</form>

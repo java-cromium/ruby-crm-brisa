@@ -1,0 +1,71 @@
+<h2>Dashboard</h2>
+
+<div class="grid">
+
+  <!-- Tasks Section -->
+  <article>
+    <header><strong>Recent Incomplete Tasks</strong></header>
+    <% if @tasks && !@tasks.empty? %>
+      <figure>
+        <table role="grid">
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Due Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @tasks.each do |task| %>
+              <tr>
+                <td><a href="/tasks/<%= task.id %>"><%= task.title %></a></td>
+                <td><%= task.due_date ? task.due_date.strftime('%Y-%m-%d') : 'N/A' %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </figure>
+    <% else %>
+      <p><em>No incomplete tasks.</em></p>
+    <% end %>
+    <footer>
+      <a href="/tasks" role="button" class="action-button-sm action-view">View All Tasks</a>
+    </footer>
+  </article>
+
+  <!-- Customers Section -->
+  <article>
+    <header><strong>Recent Customers</strong></header>
+    <% if @customers && !@customers.empty? %>
+      <figure>
+        <table role="grid">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @customers.each do |customer| %>
+              <tr>
+                <td>
+                  <% if customer.contact %>
+                    <a href="/customers/<%= customer.id %>"><%= customer.contact.first_name %> <%= customer.contact.last_name %></a>
+                  <% else %>
+                    <a href="/customers/<%= customer.id %>">Contact Missing (ID: <%= customer.id %>)</a>
+                  <% end %>
+                </td>
+                <td><%= customer.status.capitalize %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </figure>
+    <% else %>
+      <p><em>No recent customers.</em></p>
+    <% end %>
+    <footer>
+      <a href="/customers" role="button" class="action-button-sm action-view">View All Customers</a>
+    </footer>
+  </article>
+
+</div> <!-- /.grid -->

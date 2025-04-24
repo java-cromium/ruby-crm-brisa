@@ -1,0 +1,15 @@
+# Environment variables
+.env*
+
+# Log files
+log/*.log
+
+# Temporary files
+tmp/
+
+# Bundler local config
+.bundle/
+
+# OS generated files
+.DS_Store
+Thumbs.db

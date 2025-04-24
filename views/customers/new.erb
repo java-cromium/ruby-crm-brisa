@@ -1,0 +1,45 @@
+<!-- views/customers/new.erb -->
+<h2>Add New Customer</h2>
+
+<% if @available_contacts.empty? %>
+  <p>There are no contacts available to add as customers. Please <a href="/contacts/new">create a contact</a> first.</p>
+<% else %>
+  <form action="/customers" method="post" class="form-standard">
+    <div class="form-group">
+      <label for="contact_id">Select Contact:</label>
+      <select id="contact_id" name="customer[contact_id]" 
+              class="<%= 'is-invalid' if @customer&.errors&.on(:contact_id) %>" required>
+        <option value="" <%= 'selected' unless @customer&.contact_id %> disabled>-- Please select a contact --</option>
+        <% @available_contacts.each do |contact| %>
+          <option value="<%= contact.id %>" <%= 'selected' if contact.id == @customer&.contact_id %>>
+            <%= contact.first_name %> <%= contact.last_name %> (<%= contact.email %>)
+          </option>
+        <% end %>
+      </select>
+      <% if @customer&.errors&.on(:contact_id) %>
+        <span class="field-error"><%= @customer.errors.on(:contact_id).join(', ') %></span>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Initial Status:</label>
+      <select id="status" name="customer[status]" 
+              class="<%= 'is-invalid' if @customer&.errors&.on(:status) %>" required>
+        <% @allowed_statuses.each do |status| %>
+          <%# Select submitted status on error, otherwise default to 'active' %>
+          <option value="<%= status %>" <%= @customer&.status ? ('selected' if status == @customer.status) : ('selected' if status == 'active') %>> 
+            <%= status.capitalize %>
+          </option>
+        <% end %>
+      </select>
+       <% if @customer&.errors&.on(:status) %>
+        <span class="field-error"><%= @customer.errors.on(:status).join(', ') %></span>
+      <% end %>
+    </div>
+
+    <div>
+      <button type="submit" class="button">Add Customer</button>
+      <a href="/customers" class="button secondary">Cancel</a>
+    </div>
+  </form>
+<% end %>

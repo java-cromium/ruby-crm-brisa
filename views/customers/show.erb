@@ -1,0 +1,25 @@
+<% contact = @customer.contact # Convenience variable %>
+<h2>Customer Details: <%= contact.first_name %> <%= contact.last_name %></h2>
+
+<div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px; background-color: #f9f9f9;">
+  <p><strong>Customer ID:</strong> <%= @customer.id %></p>
+  <p><strong>Status:</strong> <%= @customer.status %></p>
+  <p><strong>Customer Since:</strong> <%= @customer.created_at ? @customer.created_at.strftime('%Y-%m-%d %H:%M:%S') : '<em>N/A</em>' %></p>
+  <p><strong>Last Updated:</strong> <%= @customer.updated_at ? @customer.updated_at.strftime('%Y-%m-%d %H:%M:%S') : '<em>N/A</em>' %></p>
+
+  <hr style="margin: 10px 0;"> <!-- Separator -->
+
+  <h3>Associated Contact Information</h3>
+  <p><strong>Contact ID:</strong> <a href="/contacts/<%= contact.id %>"><%= contact.id %></a></p>
+  <p><strong>Name:</strong> <a href="/contacts/<%= contact.id %>"><%= contact.first_name %> <%= contact.last_name %></a></p>
+  <p><strong>Email:</strong> <%= contact.email.nil? || contact.email.empty? ? '<em>N/A</em>' : contact.email %></p>
+  <p><strong>Phone:</strong> <%= contact.phone.nil? || contact.phone.empty? ? '<em>N/A</em>' : contact.phone %></p>
+</div>
+
+<hr style="margin: 20px 0;">
+
+<p>
+  <!-- Link to the edit page -->
+  <a href="/customers/<%= @customer.id %>/edit" class="button">Edit Customer Status</a>
+  <a href="/customers" class="button">Back to Customers List</a>
+</p>

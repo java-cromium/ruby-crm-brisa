@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 40" width="120" height="32">
+  <defs>
+    <style>
+      .breeze-line { fill: none; stroke: #FFD95F; stroke-width: 2; stroke-linecap: round; } /* Updated stroke color */
+      .brand-text { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px; fill: #FFD63A; font-weight: 600; dominant-baseline: central; } /* Updated fill color */
+    </style>
+  </defs>
+  
+  <!-- Breeze Lines -->
+  <path class="breeze-line" d="M 5 10 Q 20 5, 35 10" />
+  <path class="breeze-line" d="M 8 17 Q 23 12, 38 17" />
+  <path class="breeze-line" d="M 5 24 Q 20 19, 35 24" />
+
+  <!-- Brand Name -->
+  <text x="48" y="20" class="brand-text">Brisa</text>
+</svg>

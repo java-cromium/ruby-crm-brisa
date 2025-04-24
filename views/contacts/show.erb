@@ -1,0 +1,38 @@
+<h2>Contact: <%= @contact.first_name %> <%= @contact.last_name %></h2>
+
+<article class="card">
+  <dl>
+    <dt>ID</dt>
+    <dd><%= @contact.id %></dd>
+
+    <dt>First Name</dt>
+    <dd><%= @contact.first_name %></dd>
+
+    <dt>Last Name</dt>
+    <dd><%= @contact.last_name %></dd>
+
+    <dt>Email</dt>
+    <dd><%= @contact.email.nil? || @contact.email.empty? ? '<em>N/A</em>' : @contact.email %></dd>
+
+    <dt>Phone</dt>
+    <dd><%= @contact.phone.nil? || @contact.phone.empty? ? '<em>N/A</em>' : @contact.phone %></dd>
+
+    <dt>Customer Status</dt>
+    <dd>
+      <% if @contact.customer %>
+        Yes (Status: <%= @contact.customer.status %>)
+        (<a href="/customers/<%= @contact.customer.id %>">View Customer Record</a>)
+      <% else %>
+        No
+        <form action="/contacts/<%= @contact.id %>/make_customer" method="post" style="display: inline;">
+          <button type="submit" class="secondary">Make Customer</button>
+        </form>
+      <% end %>
+    </dd>
+  </dl>
+</article>
+
+<footer>
+  <a href="/contacts/<%= @contact.id %>/edit" role="button" class="contrast">Edit Contact</a>
+  <a href="/contacts" role="button" class="secondary">Back to Contacts List</a>
+</footer>
