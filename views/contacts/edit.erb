@@ -1,55 +1,134 @@
-<h2>Edit Contact: <%= @contact.first_name %> <%= @contact.last_name %></h2>
+<div class="contact-header" style="margin-bottom: 20px;">
+  <h2><i class="fas fa-edit" style="color: #FFD63A;"></i> Edit Contact: <%= @contact.first_name %> <%= @contact.last_name %></h2>
+</div>
 
-<form action="/contacts/<%= @contact.id %>" method="post">
-  <input type="hidden" name="_method" value="put">
-
-  <div>
-    <label for="first_name">First Name:</label>
-    <input type="text" id="first_name" name="contact[first_name]" value="<%= @contact.first_name %>" 
-           aria-invalid="<%= @contact&.errors&.on(:first_name) ? 'true' : 'false' %>" required>
-    <% if @contact&.errors&.on(:first_name) %>
-      <small><%= @contact.errors.on(:first_name).join(', ') %></small>
-    <% end %>
+<div class="row">
+  <!-- Contact Edit Form Card -->
+  <div class="column" style="flex-basis: 60%;">
+    <article class="contact-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff;">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Contact Information</h3>
+      </header>
+      
+      <form action="/contacts/<%= @contact.id %>" method="post">
+        <input type="hidden" name="_method" value="patch">
+        
+        <div class="form-field" style="margin-bottom: 15px;">
+          <label for="first_name" style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">
+            <i class="fas fa-user" style="color: #666; margin-right: 5px;"></i> First Name:
+          </label>
+          <input type="text" id="first_name" name="contact[first_name]" value="<%= @contact.first_name %>" 
+                 aria-invalid="<%= @contact&.errors&.on(:first_name) ? 'true' : 'false' %>" required
+                 style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          <% if @contact&.errors&.on(:first_name) %>
+            <small style="color: #e74c3c; font-size: 0.85em;"><%= @contact.errors.on(:first_name).join(', ') %></small>
+          <% end %>
+        </div>
+        
+        <div class="form-field" style="margin-bottom: 15px;">
+          <label for="last_name" style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">
+            <i class="fas fa-user" style="color: #666; margin-right: 5px;"></i> Last Name:
+          </label>
+          <input type="text" id="last_name" name="contact[last_name]" value="<%= @contact.last_name %>" 
+                 aria-invalid="<%= @contact&.errors&.on(:last_name) ? 'true' : 'false' %>" required
+                 style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          <% if @contact&.errors&.on(:last_name) %>
+            <small style="color: #e74c3c; font-size: 0.85em;"><%= @contact.errors.on(:last_name).join(', ') %></small>
+          <% end %>
+        </div>
+        
+        <div class="form-field" style="margin-bottom: 15px;">
+          <label for="email" style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">
+            <i class="fas fa-envelope" style="color: #666; margin-right: 5px;"></i> Email:
+          </label>
+          <input type="email" id="email" name="contact[email]" value="<%= @contact.email %>" 
+                 aria-invalid="<%= @contact&.errors&.on(:email) ? 'true' : 'false' %>" required
+                 style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          <% if @contact&.errors&.on(:email) %>
+            <small style="color: #e74c3c; font-size: 0.85em;"><%= @contact.errors.on(:email).join(', ') %></small>
+          <% end %>
+        </div>
+        
+        <div class="form-field" style="margin-bottom: 20px;">
+          <label for="phone" style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">
+            <i class="fas fa-phone" style="color: #666; margin-right: 5px;"></i> Phone:
+          </label>
+          <input type="tel" id="phone" name="contact[phone]" value="<%= @contact.phone %>" 
+                 aria-invalid="<%= @contact&.errors&.on(:phone) ? 'true' : 'false' %>" required
+                 style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          <% if @contact&.errors&.on(:phone) %>
+            <small style="color: #e74c3c; font-size: 0.85em;"><%= @contact.errors.on(:phone).join(', ') %></small>
+          <% end %>
+        </div>
+        
+        <div class="form-actions" style="display: flex; gap: 10px;">
+          <button type="submit" class="button" 
+                  style="background-color: #FFD63A; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+            <i class="fas fa-save"></i> Update Contact
+          </button>
+          <a href="/contacts/<%= @contact.id %>" role="button" class="secondary" 
+             style="background-color: #f8f9fa; border: 1px solid #ddd; color: #333; padding: 8px 15px; border-radius: 4px; text-decoration: none;">
+            <i class="fas fa-times"></i> Cancel
+          </a>
+        </div>
+      </form>
+      
+      <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee;">
+        <h4 style="color: #e74c3c; margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> Danger Zone</h4>
+        <p style="margin-bottom: 15px; color: #666; font-size: 0.9em;">
+          Deleting this contact will permanently remove it from the system. If this contact is associated with a customer, the customer record will also be deleted.
+        </p>
+        <form action="/contacts/<%= @contact.id %>" method="post" style="display: inline;" 
+              onsubmit="return confirm('Are you sure you want to delete this contact? This will also remove their customer record if they are one.');">
+          <input type="hidden" name="_method" value="delete">
+          <button type="submit" class="button danger" 
+                  style="background-color: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+            <i class="fas fa-trash"></i> Delete Contact
+          </button>
+        </form>
+      </div>
+    </article>
   </div>
-
-  <div>
-    <label for="last_name">Last Name:</label>
-    <input type="text" id="last_name" name="contact[last_name]" value="<%= @contact.last_name %>" 
-           aria-invalid="<%= @contact&.errors&.on(:last_name) ? 'true' : 'false' %>" required>
-    <% if @contact&.errors&.on(:last_name) %>
-      <small><%= @contact.errors.on(:last_name).join(', ') %></small>
-    <% end %>
+  
+  <!-- Customer Status Card -->
+  <div class="column" style="flex-basis: 40%;">
+    <article class="status-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff; height: calc(100% - 40px);">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Customer Status</h3>
+      </header>
+      
+      <div style="text-align: center; padding: 20px 0;">
+        <% if @contact.customer %>
+          <div style="margin-bottom: 15px;">
+            <span style="font-size: 48px; color: #2ecc71;"><i class="fas fa-check-circle"></i></span>
+            <h4 style="margin-top: 15px;">This contact is a customer</h4>
+          </div>
+          
+          <div class="status-badge status-<%= @contact.customer.status %>" 
+               style="display: inline-block; padding: 8px 15px; border-radius: 20px; font-weight: bold; margin-bottom: 20px;">
+            <%= @contact.customer.status.capitalize %>
+          </div>
+          
+          <div style="margin-top: 20px;">
+            <a href="/customers/<%= @contact.customer.id %>" role="button" class="contrast" style="width: 100%; margin-bottom: 10px;">
+              <i class="fas fa-building"></i> View Customer Record
+            </a>
+            <a href="/customers/<%= @contact.customer.id %>/edit" role="button" class="secondary" style="width: 100%;">
+              <i class="fas fa-edit"></i> Edit Customer Status
+            </a>
+          </div>
+        <% else %>
+          <div style="margin-bottom: 15px;">
+            <span style="font-size: 48px; color: #ccc;"><i class="fas fa-user-plus"></i></span>
+            <p style="margin: 15px 0;">This contact is not yet a customer.</p>
+          </div>
+          <form action="/contacts/<%= @contact.id %>/make_customer" method="post">
+            <button type="submit" class="secondary" style="width: 100%;">
+              <i class="fas fa-plus-circle"></i> Convert to Customer
+            </button>
+          </form>
+        <% end %>
+      </div>
+    </article>
   </div>
-
-  <div>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="contact[email]" value="<%= @contact.email %>" 
-           aria-invalid="<%= @contact&.errors&.on(:email) ? 'true' : 'false' %>" required>
-    <% if @contact&.errors&.on(:email) %>
-      <small><%= @contact.errors.on(:email).join(', ') %></small>
-    <% end %>
-  </div>
-
-  <div>
-    <label for="phone">Phone:</label>
-    <input type="tel" id="phone" name="contact[phone]" value="<%= @contact.phone %>" 
-           aria-invalid="<%= @contact&.errors&.on(:phone) ? 'true' : 'false' %>" required>
-    <% if @contact&.errors&.on(:phone) %>
-      <small><%= @contact.errors.on(:phone).join(', ') %></small>
-    <% end %>
-  </div>
-
-  <div>
-    <button type="submit" class="contrast">Update Contact</button>
-    <a href="/contacts/<%= @contact.id %>" role="button" class="secondary outline">Cancel</a>
-  </div>
-
-</form>
-
-<hr style="margin-top: 20px; margin-bottom: 10px;">
-
-<!-- Delete Button Form -->
-<form action="/contacts/<%= @contact.id %>" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this contact? This will also remove their customer record if they are one.');">
-  <input type="hidden" name="_method" value="delete">
-  <button type="submit" class="secondary outline">Delete Contact</button>
-</form>
+</div>

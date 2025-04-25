@@ -1,25 +1,85 @@
 <% contact = @customer.contact # Convenience variable %>
-<h2>Customer Details: <%= contact.first_name %> <%= contact.last_name %></h2>
 
-<div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px; background-color: #f9f9f9;">
-  <p><strong>Customer ID:</strong> <%= @customer.id %></p>
-  <p><strong>Status:</strong> <%= @customer.status %></p>
-  <p><strong>Customer Since:</strong> <%= @customer.created_at ? @customer.created_at.strftime('%Y-%m-%d %H:%M:%S') : '<em>N/A</em>' %></p>
-  <p><strong>Last Updated:</strong> <%= @customer.updated_at ? @customer.updated_at.strftime('%Y-%m-%d %H:%M:%S') : '<em>N/A</em>' %></p>
-
-  <hr style="margin: 10px 0;"> <!-- Separator -->
-
-  <h3>Associated Contact Information</h3>
-  <p><strong>Contact ID:</strong> <a href="/contacts/<%= contact.id %>"><%= contact.id %></a></p>
-  <p><strong>Name:</strong> <a href="/contacts/<%= contact.id %>"><%= contact.first_name %> <%= contact.last_name %></a></p>
-  <p><strong>Email:</strong> <%= contact.email.nil? || contact.email.empty? ? '<em>N/A</em>' : contact.email %></p>
-  <p><strong>Phone:</strong> <%= contact.phone.nil? || contact.phone.empty? ? '<em>N/A</em>' : contact.phone %></p>
+<div class="customer-header" style="margin-bottom: 20px;">
+  <h2><i class="fas fa-building" style="color: #FFD63A;"></i> <%= contact.first_name %> <%= contact.last_name %></h2>
 </div>
 
-<hr style="margin: 20px 0;">
+<div class="row">
+  <!-- Customer Info Card -->
+  <div class="column" style="flex-basis: 65%;">
+    <article class="customer-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff;">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Customer Information</h3>
+      </header>
+      
+      <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Customer ID</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;"><%= @customer.id %></td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Status</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+            <span class="status-badge status-<%= @customer.status %>" style="display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 0.9em;">
+              <%= @customer.status.capitalize %>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Customer Since</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;"><%= @customer.created_at ? @customer.created_at.strftime('%Y-%m-%d %H:%M') : '<em>N/A</em>' %></td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Last Updated</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;"><%= @customer.updated_at ? @customer.updated_at.strftime('%Y-%m-%d %H:%M') : '<em>N/A</em>' %></td>
+        </tr>
+      </table>
+    </article>
+  </div>
+  
+  <!-- Contact Info Card -->
+  <div class="column" style="flex-basis: 35%;">
+    <article class="contact-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff; height: calc(100% - 40px);">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Contact Information</h3>
+      </header>
+      
+      <div style="text-align: center; padding: 20px 0;">
+        <div style="margin-bottom: 15px;">
+          <span style="font-size: 48px; color: #666;"><i class="fas fa-user-circle"></i></span>
+          <h4 style="margin-top: 15px;"><%= contact.first_name %> <%= contact.last_name %></h4>
+        </div>
+        
+        <table style="width: 100%; margin-bottom: 20px;">
+          <tr>
+            <th style="width: 30px; text-align: center;"><i class="fas fa-at" style="color: #666;"></i></th>
+            <td style="text-align: left; padding: 5px;">
+              <% if contact.email.nil? || contact.email.empty? %>
+                <em>N/A</em>
+              <% else %>
+                <a href="mailto:<%= contact.email %>" style="color: #3498db;"><%= contact.email %></a>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 30px; text-align: center;"><i class="fas fa-phone" style="color: #666;"></i></th>
+            <td style="text-align: left; padding: 5px;">
+              <% if contact.phone.nil? || contact.phone.empty? %>
+                <em>N/A</em>
+              <% else %>
+                <a href="tel:<%= contact.phone %>" style="color: #3498db;"><%= contact.phone %></a>
+              <% end %>
+            </td>
+          </tr>
+        </table>
+        
+        <a href="/contacts/<%= contact.id %>" role="button" class="contrast" style="width: 100%;"><i class="fas fa-address-card"></i> View Contact Record</a>
+      </div>
+    </article>
+  </div>
+</div>
 
-<p>
-  <!-- Link to the edit page -->
-  <a href="/customers/<%= @customer.id %>/edit" class="button">Edit Customer Status</a>
-  <a href="/customers" class="button">Back to Customers List</a>
-</p>
+<div class="actions" style="margin-top: 25px; display: flex; gap: 10px;">
+  <a href="/customers/<%= @customer.id %>/edit" role="button" class="contrast"><i class="fas fa-edit"></i> Edit Customer Status</a>
+  <a href="/customers" role="button" class="secondary"><i class="fas fa-arrow-left"></i> Back to Customers List</a>
+</div>

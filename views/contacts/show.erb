@@ -1,38 +1,81 @@
-<h2>Contact: <%= @contact.first_name %> <%= @contact.last_name %></h2>
+<div class="contact-header" style="margin-bottom: 20px;">
+  <h2><i class="fas fa-user-circle" style="color: #FFD63A;"></i> <%= @contact.first_name %> <%= @contact.last_name %></h2>
+</div>
 
-<article class="card">
-  <dl>
-    <dt>ID</dt>
-    <dd><%= @contact.id %></dd>
+<div class="row">
+  <!-- Contact Info Card -->
+  <div class="column" style="flex-basis: 65%;">
+    <article class="contact-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff;">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Contact Information</h3>
+      </header>
+      
+      <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Contact ID</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;"><%= @contact.id %></td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">First Name</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;"><%= @contact.first_name %></td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Last Name</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;"><%= @contact.last_name %></td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Email</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+            <% if @contact.email.nil? || @contact.email.empty? %>
+              <em>N/A</em>
+            <% else %>
+              <a href="mailto:<%= @contact.email %>" style="color: #3498db;"><%= @contact.email %></a>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Phone</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+            <% if @contact.phone.nil? || @contact.phone.empty? %>
+              <em>N/A</em>
+            <% else %>
+              <a href="tel:<%= @contact.phone %>" style="color: #3498db;"><%= @contact.phone %></a>
+            <% end %>
+          </td>
+        </tr>
+      </table>
+    </article>
+  </div>
+  
+  <!-- Customer Status Card -->
+  <div class="column" style="flex-basis: 35%;">
+    <article class="status-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff; height: calc(100% - 40px);">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Customer Status</h3>
+      </header>
+      
+      <div style="text-align: center; padding: 20px 0;">
+        <% if @contact.customer %>
+          <div class="status-badge status-<%= @contact.customer.status %>" style="display: inline-block; padding: 8px 15px; border-radius: 20px; font-weight: bold; margin-bottom: 15px;">
+            <%= @contact.customer.status.capitalize %>
+          </div>
+          <p style="margin-bottom: 20px;">This contact is registered as a customer.</p>
+          <a href="/customers/<%= @contact.customer.id %>" role="button" class="contrast" style="width: 100%;">View Customer Record</a>
+        <% else %>
+          <div style="margin-bottom: 15px;">
+            <span style="font-size: 48px; color: #ccc;"><i class="fas fa-user-plus"></i></span>
+            <p style="margin: 15px 0;">This contact is not yet a customer.</p>
+          </div>
+          <form action="/contacts/<%= @contact.id %>/make_customer" method="post">
+            <button type="submit" class="secondary" style="width: 100%;">Convert to Customer</button>
+          </form>
+        <% end %>
+      </div>
+    </article>
+  </div>
+</div>
 
-    <dt>First Name</dt>
-    <dd><%= @contact.first_name %></dd>
-
-    <dt>Last Name</dt>
-    <dd><%= @contact.last_name %></dd>
-
-    <dt>Email</dt>
-    <dd><%= @contact.email.nil? || @contact.email.empty? ? '<em>N/A</em>' : @contact.email %></dd>
-
-    <dt>Phone</dt>
-    <dd><%= @contact.phone.nil? || @contact.phone.empty? ? '<em>N/A</em>' : @contact.phone %></dd>
-
-    <dt>Customer Status</dt>
-    <dd>
-      <% if @contact.customer %>
-        Yes (Status: <%= @contact.customer.status %>)
-        (<a href="/customers/<%= @contact.customer.id %>">View Customer Record</a>)
-      <% else %>
-        No
-        <form action="/contacts/<%= @contact.id %>/make_customer" method="post" style="display: inline;">
-          <button type="submit" class="secondary">Make Customer</button>
-        </form>
-      <% end %>
-    </dd>
-  </dl>
-</article>
-
-<footer>
-  <a href="/contacts/<%= @contact.id %>/edit" role="button" class="contrast">Edit Contact</a>
-  <a href="/contacts" role="button" class="secondary">Back to Contacts List</a>
-</footer>
+<div class="actions" style="margin-top: 25px; display: flex; gap: 10px;">
+  <a href="/contacts/<%= @contact.id %>/edit" role="button" class="contrast" method="get"><i class="fas fa-edit"></i> Edit Contact</a>
+  <a href="/contacts" role="button" class="secondary"><i class="fas fa-arrow-left"></i> Back to Contacts List</a>
+</div>
