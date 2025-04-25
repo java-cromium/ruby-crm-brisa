@@ -1,34 +1,114 @@
-<h2>Task Details: <%= @task.title %></h2>
-
-<div style="margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px; background-color: #f9f9f9;">
-  <p><strong>ID:</strong> <%= @task.id %></p>
-  <p><strong>Title:</strong> <%= @task.title %></p>
-  <p><strong>Description:</strong> <%= @task.description.nil? || @task.description.empty? ? '<em>N/A</em>' : @task.description %></p>
-  <p><strong>Completed:</strong> <%= @task.completed ? 'Yes' : 'No' %></p>
-  <p><strong>Due Date:</strong> <%= @task.due_date ? @task.due_date.strftime('%Y-%m-%d') : '<em>N/A</em>' %></p>
-  <p><strong>Created At:</strong> <%= @task.created_at ? @task.created_at.strftime('%Y-%m-%d %H:%M:%S') : '<em>N/A</em>' %></p>
-  <p><strong>Updated At:</strong> <%= @task.updated_at ? @task.updated_at.strftime('%Y-%m-%d %H:%M:%S') : '<em>N/A</em>' %></p>
+<div class="task-header" style="margin-bottom: 20px;">
+  <h2><i class="fas fa-tasks" style="color: #FFD63A;"></i> <%= @task.title %></h2>
 </div>
 
-<!-- Display Notes -->
-<h3>Notes</h3>
-<% if @task.task_notes.empty? %>
-  <p>No notes added yet.</p>
-<% else %>
-  <ul style="list-style: none; padding-left: 0;">
-    <% @task.task_notes.each do |note| %>
-      <li style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-        <p><%= note.content %></p>
-        <small><em>Added: <%= note.created_at.strftime('%Y-%m-%d %H:%M') %></em></small>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
-<!-- Optionally add 'Add Note' form here as well, similar to edit page -->
+<div class="row">
+  <!-- Task Details Card -->
+  <div class="column" style="flex-basis: 60%;">
+    <article class="task-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff;">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Task Information</h3>
+      </header>
+      
+      <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Task ID</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;"><%= @task.id %></td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Status</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+            <% if @task.completed %>
+              <span style="display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 0.9em; background-color: #2ecc71; color: white;">Completed</span>
+            <% else %>
+              <span style="display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 0.9em; background-color: #3498db; color: white;">Active</span>
+            <% end %>
+            <form action="/tasks/<%= @task.id %>/toggle" method="post" style="display: inline; margin-left: 10px;">
+              <input type="hidden" name="_method" value="patch">
+              <button type="submit" class="action-button-sm <%= @task.completed ? 'action-edit' : 'action-add' %>" style="padding: 2px 5px; font-size: 0.8em;">
+                <%= @task.completed ? 'Mark Incomplete' : 'Mark Complete' %>
+              </button>
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Description</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+            <%= @task.description.nil? || @task.description.empty? ? '<em>N/A</em>' : @task.description %>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Due Date</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+            <% if @task.due_date %>
+              <i class="fas fa-calendar" style="color: #666; margin-right: 5px;"></i>
+              <%= @task.due_date.strftime('%Y-%m-%d') %>
+              <% if @task.due_date < Date.today && !@task.completed %>
+                <span style="color: #e74c3c; font-weight: bold; margin-left: 5px;">Overdue</span>
+              <% end %>
+            <% else %>
+              <em>N/A</em>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Created</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+            <i class="fas fa-clock" style="color: #666; margin-right: 5px;"></i>
+            <%= @task.created_at ? @task.created_at.strftime('%Y-%m-%d %H:%M') : 'N/A' %>
+          </td>
+        </tr>
+        <tr>
+          <th style="width: 30%; text-align: left; padding: 8px; color: #666;">Updated</th>
+          <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+            <i class="fas fa-sync" style="color: #666; margin-right: 5px;"></i>
+            <%= @task.updated_at ? @task.updated_at.strftime('%Y-%m-%d %H:%M') : 'N/A' %>
+          </td>
+        </tr>
+      </table>
+    </article>
+  </div>
+  
+  <!-- Notes Card -->
+  <div class="column" style="flex-basis: 40%;">
+    <article class="notes-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff;">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Task Notes</h3>
+      </header>
+      
+      <% if @task.task_notes.empty? %>
+        <div style="text-align: center; padding: 20px 0; color: #666;">
+          <i class="fas fa-sticky-note" style="font-size: 3em; margin-bottom: 10px; color: #ddd;"></i>
+          <p>No notes added yet.</p>
+        </div>
+      <% else %>
+        <div style="max-height: 300px; overflow-y: auto; padding-right: 5px;">
+          <% @task.task_notes.each do |note| %>
+            <div style="margin-bottom: 15px; padding: 10px; border-left: 4px solid #FFD63A; background-color: #f9f9f9; border-radius: 0 4px 4px 0;">
+              <p style="margin-bottom: 5px;"><%= note.content %></p>
+              <small style="color: #666;"><i class="fas fa-clock"></i> <%= note.created_at.strftime('%Y-%m-%d %H:%M') %></small>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+      
+      <!-- Add Note Form -->
+      <div style="margin-top: 20px;">
+        <h4 style="margin-bottom: 10px; color: #666;"><i class="fas fa-plus-circle"></i> Add a Note</h4>
+        <form action="/tasks/<%= @task.id %>/notes" method="post">
+          <div style="margin-bottom: 10px;">
+            <textarea id="content" name="content" rows="3" style="width: 100%; border: 1px solid #ddd; border-radius: 4px; padding: 8px;" placeholder="Enter your note here..." required></textarea>
+          </div>
+          <div>
+            <button type="submit" class="button" style="background-color: #FFD63A; border: none;">Add Note</button>
+          </div>
+        </form>
+      </div>
+    </article>
+  </div>
+</div>
 
-<hr style="margin: 20px 0;">
-
-<p>
-  <a href="/tasks/<%= @task.id %>/edit" class="button">Edit Task</a>
-  <a href="/tasks" class="button">Back to Tasks List</a>
-</p>
+<div class="actions" style="margin-top: 25px; display: flex; gap: 10px;">
+  <a href="/tasks/<%= @task.id %>/edit" role="button" class="contrast"><i class="fas fa-edit"></i> Edit Task</a>
+  <a href="/tasks" role="button" class="secondary"><i class="fas fa-arrow-left"></i> Back to Tasks List</a>
+</div>

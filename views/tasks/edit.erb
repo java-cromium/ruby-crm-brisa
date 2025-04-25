@@ -1,79 +1,121 @@
-<h2>Edit Task: <%= @task.title %></h2>
+<div class="task-header" style="margin-bottom: 20px;">
+  <h2><i class="fas fa-edit" style="color: #FFD63A;"></i> Edit Task: <%= @task.title %></h2>
+</div>
 
-<form action="/tasks/<%= @task.id %>" method="post" class="form-standard">
-  <input type="hidden" name="_method" value="patch"> 
-
-  <div class="form-group">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="task[title]" value="<%= @task.title %>" 
-           class="<%= 'is-invalid' if @task&.errors&.on(:title) %>" required>
-    <% if @task&.errors&.on(:title) %>
-      <span class="field-error"><%= @task.errors.on(:title).join(', ') %></span>
-    <% end %>
+<div class="row">
+  <!-- Task Edit Form Card -->
+  <div class="column" style="flex-basis: 60%;">
+    <article class="task-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff;">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Task Information</h3>
+      </header>
+      
+      <form action="/tasks/<%= @task.id %>" method="post">
+        <input type="hidden" name="_method" value="patch"> 
+        
+        <div class="form-field" style="margin-bottom: 15px;">
+          <label for="title" style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Title:</label>
+          <input type="text" id="title" name="task[title]" value="<%= @task.title %>" 
+                 class="<%= 'is-invalid' if @task&.errors&.on(:title) %>" required
+                 style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          <% if @task&.errors&.on(:title) %>
+            <span class="field-error" style="color: #e74c3c; font-size: 0.85em;"><%= @task.errors.on(:title).join(', ') %></span>
+          <% end %>
+        </div>
+        
+        <div class="form-field" style="margin-bottom: 15px;">
+          <label for="description" style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Description:</label>
+          <textarea id="description" name="task[description]" rows="4" 
+                    class="<%= 'is-invalid' if @task&.errors&.on(:description) %>"
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"><%= @task.description %></textarea>
+          <% if @task&.errors&.on(:description) %>
+            <span class="field-error" style="color: #e74c3c; font-size: 0.85em;"><%= @task.errors.on(:description).join(', ') %></span>
+          <% end %>
+        </div>
+        
+        <div class="form-field" style="margin-bottom: 15px;">
+          <label for="due_date" style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">
+            <i class="fas fa-calendar" style="color: #666; margin-right: 5px;"></i> Due Date:
+          </label>
+          <input type="date" id="due_date" name="task[due_date]" value="<%= @task.due_date ? @task.due_date.strftime('%Y-%m-%d') : '' %>" 
+                 class="<%= 'is-invalid' if @task&.errors&.on(:due_date) %>"
+                 style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          <% if @task&.errors&.on(:due_date) %>
+            <span class="field-error" style="color: #e74c3c; font-size: 0.85em;"><%= @task.errors.on(:due_date).join(', ') %></span>
+          <% end %>
+        </div>
+        
+        <div class="form-field" style="margin-bottom: 20px;">
+          <label style="display: flex; align-items: center; font-weight: bold; color: #555;">
+            <input type="hidden" name="task[completed]" value="false">
+            <input type="checkbox" id="completed" name="task[completed]" value="true" <%= 'checked' if @task.completed %>
+                   class="<%= 'is-invalid' if @task&.errors&.on(:completed) %>"
+                   style="margin-right: 8px;">
+            <span><i class="fas fa-check-circle" style="color: #2ecc71; margin-right: 5px;"></i> Mark as Completed</span>
+          </label>
+          <% if @task&.errors&.on(:completed) %>
+            <span class="field-error" style="color: #e74c3c; font-size: 0.85em;"><%= @task.errors.on(:completed).join(', ') %></span>
+          <% end %>
+        </div>
+        
+        <div class="form-actions" style="display: flex; gap: 10px;">
+          <button type="submit" class="button" style="background-color: #FFD63A; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+            <i class="fas fa-save"></i> Update Task
+          </button>
+          <a href="/tasks/<%= @task.id %>" class="button secondary" style="background-color: #f8f9fa; border: 1px solid #ddd; color: #333; padding: 8px 15px; border-radius: 4px; text-decoration: none;">
+            <i class="fas fa-times"></i> Cancel
+          </a>
+        </div>
+      </form>
+      
+      <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee;">
+        <form action="/tasks/<%= @task.id %>" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this task and all its notes?');">
+          <input type="hidden" name="_method" value="delete">
+          <button type="submit" class="button danger" style="background-color: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+            <i class="fas fa-trash"></i> Delete Task
+          </button>
+        </form>
+      </div>
+    </article>
   </div>
-
-  <div class="form-group">
-    <label for="description">Description:</label>
-    <textarea id="description" name="task[description]" rows="4" 
-              class="<%= 'is-invalid' if @task&.errors&.on(:description) %>"><%= @task.description %></textarea>
-    <% if @task&.errors&.on(:description) %>
-      <span class="field-error"><%= @task.errors.on(:description).join(', ') %></span>
-    <% end %>
+  
+  <!-- Notes Card -->
+  <div class="column" style="flex-basis: 40%;">
+    <article class="notes-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff;">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Task Notes</h3>
+      </header>
+      
+      <% if @task.task_notes.empty? %>
+        <div style="text-align: center; padding: 20px 0; color: #666;">
+          <i class="fas fa-sticky-note" style="font-size: 3em; margin-bottom: 10px; color: #ddd;"></i>
+          <p>No notes added yet.</p>
+        </div>
+      <% else %>
+        <div style="max-height: 300px; overflow-y: auto; padding-right: 5px;">
+          <% @task.task_notes.each do |note| %>
+            <div style="margin-bottom: 15px; padding: 10px; border-left: 4px solid #FFD63A; background-color: #f9f9f9; border-radius: 0 4px 4px 0;">
+              <p style="margin-bottom: 5px;"><%= note.content %></p>
+              <small style="color: #666;"><i class="fas fa-clock"></i> <%= note.created_at.strftime('%Y-%m-%d %H:%M') %></small>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+      
+      <!-- Add Note Form -->
+      <div style="margin-top: 20px;">
+        <h4 style="margin-bottom: 10px; color: #666;"><i class="fas fa-plus-circle"></i> Add a Note</h4>
+        <form action="/tasks/<%= @task.id %>/notes" method="post">
+          <div style="margin-bottom: 10px;">
+            <textarea id="content" name="content" rows="3" style="width: 100%; border: 1px solid #ddd; border-radius: 4px; padding: 8px;" placeholder="Enter your note here..." required></textarea>
+          </div>
+          <div>
+            <button type="submit" class="button" style="background-color: #FFD63A; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+              <i class="fas fa-plus"></i> Add Note
+            </button>
+          </div>
+        </form>
+      </div>
+    </article>
   </div>
-
-  <div class="form-group">
-    <label for="due_date">Due Date:</label>
-    <input type="date" id="due_date" name="task[due_date]" value="<%= @task.due_date ? @task.due_date.strftime('%Y-%m-%d') : '' %>" 
-           class="<%= 'is-invalid' if @task&.errors&.on(:due_date) %>">
-    <% if @task&.errors&.on(:due_date) %>
-      <span class="field-error"><%= @task.errors.on(:due_date).join(', ') %></span>
-    <% end %>
-  </div>
-
-  <div class="form-group">
-    <label for="completed">Completed:</label>
-    <input type="hidden" name="task[completed]" value="false">
-    <input type="checkbox" id="completed" name="task[completed]" value="true" <%= 'checked' if @task.completed %>
-           class="<%= 'is-invalid' if @task&.errors&.on(:completed) %>">
-    <% if @task&.errors&.on(:completed) %>
-      <span class="field-error"><%= @task.errors.on(:completed).join(', ') %></span>
-    <% end %>
-  </div>
-
-  <div>
-    <button type="submit" class="button">Update Task</button>
-    <a href="/tasks/<%= @task.id %>" class="button secondary">Cancel</a>
-  </div>
-</form>
-
-<hr style="margin-top: 20px; margin-bottom: 10px;">
-
-<form action="/tasks/<%= @task.id %>" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this task and all its notes?');">
-  <input type="hidden" name="_method" value="delete">
-  <button type="submit" class="button danger">Delete Task</button>
-</form>
-
-<h3>Notes</h3>
-<% if @task.task_notes.empty? %>
-  <p>No notes added yet.</p>
-<% else %>
-  <ul>
-    <% @task.task_notes.each do |note| %>
-      <li>
-        <%= note.content %>
-        <small>(Added: <%= note.created_at.strftime('%Y-%m-%d %H:%M') %>)</small>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
-
-<h3>Add a Note</h3>
-<form action="/tasks/<%= @task.id %>/notes" method="post" class="form-standard">
-  <div class="form-group">
-    <label for="content">New Note:</label>
-    <textarea id="content" name="content" rows="3" required></textarea>
-  </div>
-  <div>
-    <button type="submit" class="button">Add Note</button>
-  </div>
-</form>
+</div>

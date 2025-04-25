@@ -7,31 +7,76 @@
     <!-- Pico.css CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <link rel="stylesheet" href="/css/style.css"> <!-- Re-enabled custom styles -->
-    <!-- Removed inline style block -->
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+      /* Additional styles for cards and layouts */
+      .row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .column {
+        flex: 1;
+        min-width: 300px;
+      }
+      .status-badge {
+        color: white;
+        background-color: #777;
+      }
+      .status-badge.status-lead {
+        background-color: #3498db;
+      }
+      .status-badge.status-prospect {
+        background-color: #9b59b6;
+      }
+      .status-badge.status-customer {
+        background-color: #2ecc71;
+      }
+      .status-badge.status-inactive {
+        background-color: #95a5a6;
+      }
+    </style>
 </head>
 <body>
 
   <!-- Navigation -->
   <nav class="container-fluid">
-    <ul>
-      <!-- Replace text with logo -->
-      <li><a href="/" style="padding: 0.5rem 0;"><img src="/images/brisa-logo.svg" alt="Brisa Logo" style="height: 72px; vertical-align: middle;"></a></li>
-    </ul>
-    <ul>
-      <!-- Check if path starts with '/tasks' -->
-      <li><a href="/tasks" class="<%= 'active' if request.path_info.start_with?('/tasks') %>">Tasks</a></li>
-      <!-- Check if path starts with '/contacts' -->
-      <li><a href="/contacts" class="<%= 'active' if request.path_info.start_with?('/contacts') %>">Contacts</a></li>
-      <!-- Check if path starts with '/customers' -->
-      <li><a href="/customers" class="<%= 'active' if request.path_info.start_with?('/customers') %>">Customers</a></li>
-      <!-- Add links for Prospects, Service Plans later -->
-    </ul>
+    <div class="nav-container">
+      <a href="/" class="brand"><img src="/images/brisa-logo.svg" alt="Brisa Logo" height="30" style="margin-right: 10px; vertical-align: middle;">Brisa CRM</a>
+      <ul>
+        <li><a href="/" class="<%= 'active' if request.path_info.start_with?('/') %>">Dashboard</a></li>
+        <li><a href="/contacts" class="<%= 'active' if request.path_info.start_with?('/contacts') %>">Contacts</a></li>
+        <li><a href="/customers" class="<%= 'active' if request.path_info.start_with?('/customers') %>">Customers</a></li>
+        <li><a href="/tasks" class="<%= 'active' if request.path_info.start_with?('/tasks') %>">Tasks</a></li>
+      </ul>
+      <div class="user-info">
+        <% if logged_in? %>
+          <span style="margin-right: 15px; color: #FFD63A;">Welcome, <%= current_user.name || current_user.email %>!</span>
+          <a href="/logout" class="button outline action-button-sm">Logout</a>
+        <% else %>
+          <%# Maybe add a login link later if needed, for now redirects handle it %>
+          <%# <a href="/login" class="button">Login</a> %>
+        <% end %>
+      </div>
+    </div>
   </nav>
 
   <!-- Main Content Area -->
-  <main class="container">
+  <main class="container main-content">
 
     <!-- Flash Messages -->
+    <% if flash[:success] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:success] %>
+      </div>
+    <% end %>
+    <% if flash[:error] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:error] %>
+      </div>
+    <% end %>
     <% if flash[:notice] %>
       <div class="alert alert-success" role="alert">
         <%= flash[:notice] %>
@@ -40,11 +85,6 @@
     <% if flash[:warning] %>
       <div class="alert alert-warning" role="alert">
         <%= flash[:warning] %>
-      </div>
-    <% end %>
-    <% if flash[:error] %>
-      <div class="alert alert-danger" role="alert">
-        <%= flash[:error] %>
       </div>
     <% end %>
 

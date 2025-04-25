@@ -1,35 +1,127 @@
-<h2>Edit Customer Status: <%= @customer.contact.first_name %> <%= @customer.contact.last_name %></h2>
+<div class="customer-header" style="margin-bottom: 20px;">
+  <h2><i class="fas fa-edit" style="color: #FFD63A;"></i> Edit Customer: <%= @customer.contact.first_name %> <%= @customer.contact.last_name %></h2>
+</div>
 
-<form action="/customers/<%= @customer.id %>" method="post" class="form-standard">
-  <!-- Use hidden input to specify PUT method for update -->
-  <input type="hidden" name="_method" value="put">
-
-  <p><strong>Customer ID:</strong> <%= @customer.id %></p>
-  <p><strong>Name:</strong> <%= @customer.contact.first_name %> <%= @customer.contact.last_name %></p>
-
-  <div class="form-group">
-    <label for="status">Status:</label>
-    <select id="status" name="customer[status]" 
-            class="<%= 'is-invalid' if @customer&.errors&.on(:status) %>">
-      <% @allowed_statuses.each do |status| %>
-        <option value="<%= status %>" <%= 'selected' if status == @customer.status %>>
-          <%= status.capitalize %>
-        </option>
-      <% end %>
-    </select>
-    <% if @customer&.errors&.on(:status) %>
-      <span class="field-error"><%= @customer.errors.on(:status).join(', ') %></span>
-    <% end %>
+<div class="row">
+  <!-- Customer Edit Form Card -->
+  <div class="column" style="flex-basis: 60%;">
+    <article class="customer-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff;">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Customer Status</h3>
+      </header>
+      
+      <div style="margin-bottom: 20px;">
+        <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
+          <tr>
+            <th style="width: 40%; text-align: left; padding: 8px; color: #666;">Customer ID</th>
+            <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;"><%= @customer.id %></td>
+          </tr>
+          <tr>
+            <th style="width: 40%; text-align: left; padding: 8px; color: #666;">Contact Name</th>
+            <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+              <%= @customer.contact.first_name %> <%= @customer.contact.last_name %>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 40%; text-align: left; padding: 8px; color: #666;">Current Status</th>
+            <td style="padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+              <span class="status-badge status-<%= @customer.status %>" style="display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 0.9em;">
+                <%= @customer.status.capitalize %>
+              </span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      
+      <form action="/customers/<%= @customer.id %>" method="post">
+        <!-- Use hidden input to specify PUT method for update -->
+        <input type="hidden" name="_method" value="put">
+        
+        <div class="form-field" style="margin-bottom: 20px;">
+          <label for="status" style="display: block; margin-bottom: 10px; font-weight: bold; color: #555;">
+            <i class="fas fa-tag" style="color: #666; margin-right: 5px;"></i> Update Status:
+          </label>
+          <select id="status" name="customer[status]" 
+                  class="<%= 'is-invalid' if @customer&.errors&.on(:status) %>"
+                  style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 1em;">
+            <% @allowed_statuses.each do |status| %>
+              <option value="<%= status %>" <%= 'selected' if status == @customer.status %>>
+                <%= status.capitalize %>
+              </option>
+            <% end %>
+          </select>
+          <% if @customer&.errors&.on(:status) %>
+            <span class="field-error" style="color: #e74c3c; font-size: 0.85em; margin-top: 5px; display: block;">
+              <%= @customer.errors.on(:status).join(', ') %>
+            </span>
+          <% end %>
+        </div>
+        
+        <div class="form-actions" style="display: flex; gap: 10px;">
+          <button type="submit" class="button" style="background-color: #FFD63A; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+            <i class="fas fa-save"></i> Update Status
+          </button>
+          <a href="/customers/<%= @customer.id %>" class="button secondary" style="background-color: #f8f9fa; border: 1px solid #ddd; color: #333; padding: 10px 15px; border-radius: 4px; text-decoration: none;">
+            <i class="fas fa-times"></i> Cancel
+          </a>
+        </div>
+      </form>
+      
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+        <h4 style="color: #e74c3c; margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> Danger Zone</h4>
+        <p style="margin-bottom: 15px; color: #666; font-size: 0.9em;">
+          Removing the customer status will keep the contact record but delete the customer relationship.
+        </p>
+        <!-- Delete Button Form -->
+        <form action="/customers/<%= @customer.id %>" method="post" style="display: inline;" 
+              onsubmit="return confirm('Are you sure you want to remove customer status for this contact? The contact record will remain.');">
+          <input type="hidden" name="_method" value="delete">
+          <button type="submit" class="button danger" style="background-color: #e74c3c; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer;">
+            <i class="fas fa-trash"></i> Remove Customer Status
+          </button>
+        </form>
+      </div>
+    </article>
   </div>
-
-  <button type="submit" class="button">Update Status</button>
-  <a href="/customers/<%= @customer.id %>" class="button secondary">Cancel</a> <!-- Link back to show page -->
-</form>
-
-<hr style="margin-top: 20px; margin-bottom: 10px;">
-
-<!-- Delete Button Form -->
-<form action="/customers/<%= @customer.id %>" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to remove customer status for this contact? The contact record will remain.');">
-  <input type="hidden" name="_method" value="delete">
-  <button type="submit" class="button danger">Remove Customer Status</button>
-</form>
+  
+  <!-- Contact Info Card -->
+  <div class="column" style="flex-basis: 40%;">
+    <article class="contact-card" style="box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; background-color: #fff; height: calc(100% - 40px);">
+      <header>
+        <h3 style="border-bottom: 2px solid #FFD63A; padding-bottom: 10px; margin-bottom: 15px;">Contact Information</h3>
+      </header>
+      
+      <div style="text-align: center; padding: 20px 0;">
+        <div style="margin-bottom: 15px;">
+          <span style="font-size: 48px; color: #666;"><i class="fas fa-user-circle"></i></span>
+          <h4 style="margin-top: 15px;"><%= @customer.contact.first_name %> <%= @customer.contact.last_name %></h4>
+        </div>
+        
+        <table style="width: 100%; margin-bottom: 20px;">
+          <tr>
+            <th style="width: 30px; text-align: center;"><i class="fas fa-at" style="color: #666;"></i></th>
+            <td style="text-align: left; padding: 5px;">
+              <% if @customer.contact.email.nil? || @customer.contact.email.empty? %>
+                <em>N/A</em>
+              <% else %>
+                <a href="mailto:<%= @customer.contact.email %>" style="color: #3498db;"><%= @customer.contact.email %></a>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 30px; text-align: center;"><i class="fas fa-phone" style="color: #666;"></i></th>
+            <td style="text-align: left; padding: 5px;">
+              <% if @customer.contact.phone.nil? || @customer.contact.phone.empty? %>
+                <em>N/A</em>
+              <% else %>
+                <a href="tel:<%= @customer.contact.phone %>" style="color: #3498db;"><%= @customer.contact.phone %></a>
+              <% end %>
+            </td>
+          </tr>
+        </table>
+        
+        <a href="/contacts/<%= @customer.contact.id %>" role="button" class="contrast" style="width: 100%;"><i class="fas fa-address-card"></i> View Contact Details</a>
+      </div>
+    </article>
+  </div>
+</div>
